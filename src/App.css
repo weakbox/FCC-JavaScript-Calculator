@@ -1,8 +1,87 @@
+:root {
+  --color-white-text: rgb(244,245,244);
+  --color-display: rgb(49,53,63);
+  --color-button-bg: rgb(190,192,177);
+  --color-clear-bg: rgb(204,42,54);
+  --color-clear-bg-hover: rgb(165, 34, 43);
+  --color-equals-bg: rgb(235,104,65);
+  --color-equals-bg-hover: rgb(192, 86, 54);
+  --color-operator-bg: rgb(0,160,176);
+  --color-operator-bg-hover: rgb(0, 133, 145);
+  --color-number-bg: rgb(244,245,244);
+  --color-number-bg-hover: rgb(219, 219, 219);
+}
+
 * {
   margin: 0;
   padding: 0;
 }
 
-.calc-container {
-  text-align: center;
+.display-container {
+  padding: 0.5em;
+  color: var(--color-white-text);
+  background-color: var(--color-display);
+  border-radius: 2px 0;
+}
+
+.button-container {
+  padding: 0.5em;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 0.5em;
+  background-color: var(--color-button-bg);
+  border-radius: 0 2px;
+}
+
+button {
+  border: none;
+  border-radius: 2px;
+}
+
+.normal {
+  height: 4em;
+}
+
+.wide {
+  grid-column: span 2;
+}
+
+.tall {
+  grid-row: span 2;
+  height: 100%;
+}
+
+#clear {
+  color: var(--color-white-text);
+  background-color: var(--color-clear-bg);
+}
+
+#clear:hover {
+  background-color: var(--color-clear-bg-hover);
+}
+
+#equals {
+  color: var(--color-white-text);
+  background-color: var(--color-equals-bg);
+}
+
+#equals:hover {
+  background-color: var(--color-equals-bg-hover);
+}
+
+.operator {
+  color: var(--color-white-text);
+  background-color: var(--color-operator-bg);
+}
+
+.operator:hover {
+  background-color: var(--color-operator-bg-hover);
+}
+
+.number {
+  background-color: var(--color-number-bg);
+}
+
+.number:hover {
+  background-color: var(--color-number-bg-hover);
 }
