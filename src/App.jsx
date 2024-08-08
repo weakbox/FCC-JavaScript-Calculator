@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 
 const calcButtons = [
@@ -35,11 +35,58 @@ const drawCalcButtons = (buttons) => {
   });
 };
 
+// Iterates through equation array to evaluate result.
+const evaluate = (equation) => {
+  let firstOperand = 0;
+  let secondOperand = 0;
+  let operator = null;
+  for (let i = 0; i < equation.length; i++) {
+    const element = equation[i];
+    const isNumber = !isNaN(Number(element));
+    
+    if (isNumber) {
+      if (!firstOperand) {
+        firstOperand = Number(element);
+      } else {
+        secondOperand = Number(element);
+        // Calculate result:
+        switch (operator) {
+          case "+":
+            firstOperand = firstOperand + secondOperand;
+            break;
+          case "-":
+            firstOperand = firstOperand - secondOperand;
+            break;
+          case "x":
+            firstOperand = firstOperand * secondOperand;
+            break;
+          case "/":
+            firstOperand = firstOperand / secondOperand;
+            break;
+          default:
+            console.error(`An invalid operator was used: "${operator}"`);
+        }
+        console.log("Evaluating the equation:", firstOperand, secondOperand, operator, equation);
+        secondOperand = 0;
+        operator = 0;
+      }
+    } else {
+        // Handle negative case:
+        if (operator && element === "-")
+        {
+          equation[i + 1] = !isNaN(equation[i + 1]) ? -equation[i + 1] : equation[i + 1]; // Sloppy code -> replace!
+          console.log("Negavtive spotted.");
+        } else {
+          operator = element;
+        }   
+    }
+  }
+  return firstOperand.toString();
+};
+
 function App() {
-  const [display, setDisplay] = useState("Get started!");
-  const [operand, setOperand] = useState(0);
-  const [prevOperand, setPrevOperand] = useState(null);
-  const [operator, setOperator] = useState(null);
+  const [operand, setOperand] = useState("0");
+  const [equation, setEquation] = useState([]);
 
   // Use event delegation to handle button functionality:
   const handleClick = (event) => {
@@ -89,37 +136,36 @@ function App() {
   };
 
   const handleNumber = (number) => {
-    // React provides the previous state as an argument (prevOperand in this case):
-    setOperand((prevOperand) => {
-      // Do not allow user to add leading zeros:  
-      const newOperand = prevOperand ? prevOperand + number: number;
-
-      if (newOperand.length >= 12) { return operand; }
-
-      setDisplay(newOperand);
-      return newOperand;
-    });
+    setOperand(o => o !== "0" ? o + number : number);
   };
 
   const handleOperator = (operator) => {
-    console.log(operator);
+    // Do not append empty operand to equation.
+    operand ? setEquation(e => [...e, operand, operator]) : setEquation(e => [...e, operator]);
+    setOperand("");
   };
 
   const handleClear = () => {
-    setDisplay(0);
-    setOperand(0);
-    setPrevOperand(null);
-    setOperator(null);
+    setOperand("0");
+    setEquation([]);
   };
 
-  const handleEquals = () => {};
-  const handleDecimal = () => {};
+  const handleEquals = () => {
+    const result = evaluate([...equation, operand]);
+  
+    setOperand(result); // Set new operand as result of calculation.
+    setEquation([]);  // Reset equation.
+  };
+
+  const handleDecimal = () => {
+    setOperand(o => !o.includes(".") ? o + "." : o);
+  };
 
   return (
     <div className="calc-container">
       <div className="display-container">
         <h2>Calc</h2>
-        <h2 id="display">{display}</h2>
+        <h2 id="display">{equation}{operand}</h2>
       </div>
       <div className="button-container" onClick={handleClick}>
         {drawCalcButtons(calcButtons)}
