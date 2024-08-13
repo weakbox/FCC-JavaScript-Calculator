@@ -61,7 +61,7 @@ const evaluate = (equation) => {
             firstOperand = firstOperand * secondOperand;
             break;
           case "/":
-            firstOperand = firstOperand / secondOperand;
+            firstOperand = Math.round(firstOperand / secondOperand * 10000) / 10000;
             break;
           default:
             console.error(`An invalid operator was used: "${operator}"`);
@@ -136,7 +136,12 @@ function App() {
   };
 
   const handleNumber = (number) => {
-    setOperand(o => o !== "0" ? o + number : number);
+    setOperand(o => o !== "0" 
+      ? o < 9999999 
+      ? o + number 
+      : o
+      : number
+    );
   };
 
   const handleOperator = (operator) => {
